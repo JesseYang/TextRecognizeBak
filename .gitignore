@@ -1,0 +1,11 @@
+*.swp
+*.txt
+MessUp
+*__pycache__
+background
+fonts
+generated
+generated_augment
+raw_text
+train_log
+val_dataset
