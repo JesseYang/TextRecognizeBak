@@ -127,7 +127,7 @@ def predict(args):
 					content.append(file_)
 		print(len(content))
 		for idx, input_path in enumerate(content):
-			# print(input_path)
+			print(input_path)
 			if idx > 0 and idx % 1000 == 0:
 				logger.info(str(idx) + "/" + str(len(content)))
 			result = predict_one(input_path, predict_func, idx + 1)
@@ -139,16 +139,19 @@ def predict(args):
 					try:
 						content = label_file.readlines()
 						
-					except Exception:
+					except UnicodeError:
+						# print(print(input_path))
 						continue
 					# content = label_file.readlines()
 					
 					target = content[0]
 				(cur_err, cur_len) = sequence_error_stat(target, result)
-				if cur_err > 0:
-					logger.info(input_path)
+				# if cur_err > 0:
+
+					# logger.info(input_path)
 					# logger.info(target)
 					# logger.info(result)
+				
 				err_num = err_num + cur_err
 				tot_num = tot_num + cur_len
 
