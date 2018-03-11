@@ -23,10 +23,12 @@ try:
     from .reader import Data, CTCBatchData
     from .mapper import *
     from .cfgs.config import cfg
+    from .hard_sample_mining import *
 except Exception:
     from reader import Data, CTCBatchData
     from mapper import *
     from cfgs.config import cfg
+    from hard_sample_mining import *
 
 class RecogResult(Inferencer):
     def __init__(self, names):
@@ -55,9 +57,10 @@ class RecogResult(Inferencer):
 
 class Model(ModelDesc):
 
-    def __init__(self):
-        pass
-        # self.batch_size = batch_size
+    def __init__(self, batch_size):
+        self.batch_size = batch_size
+        if cfg.hard_sample_mining:
+            self.hard_sample_num = min(max(round(self.batch_size * cfg.hard_ratio), 1), self.batch_size)
 
     def _get_inputs(self):
         return [InputDesc(tf.float32, [None, cfg.input_height, None, cfg.input_channel], 'feat'),   # bxmaxseqx39
@@ -126,7 +129,10 @@ class Model(ModelDesc):
                               sequence_length=seqlen,
                               ignore_longer_outputs_than_inputs=True,
                               time_major=False)
-        self.cost = tf.reduce_mean(loss, name='cost')
+        if cfg.hard_sample_mining:
+            self.cost = hard_loss(loss, self.hard_sample_num, name='cost')
+        else:
+            self.cost = tf.reduce_mean(loss, name='cost')
 
         # prediction error
         logits = tf.transpose(logits, [1, 0, 2])
@@ -184,7 +190,7 @@ def get_config(args):
             # PeriodicCallback(
             #     InferenceRunner(ds_test, [ScalarStats('error')]), 1),
         ],
-        model = Model(),
+        model = Model(args.batch_size),
         max_epoch = 200,
         steps_per_epoch = 3000
     )

@@ -57,3 +57,6 @@ cfg.train_list = ['generated_augment_train.txt']
 cfg.test_list = '1000_test.txt'
 
 cfg.batch_size = 8
+
+cfg.hard_sample_mining = True
+cfg.hard_ratio = 0.3
