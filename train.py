@@ -198,15 +198,15 @@ def get_config(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--gpu', help='comma separated list of GPU(s) to use.', default='0')
-    parser.add_argument('--batch_size', help='batch size', default=8)
+    parser.add_argument('--batch_size', help='batch size', default=64)
     parser.add_argument('--load', help='load model')
-    parser.add_argument('--log_dir', help='directory for logging files', default=None)
+    parser.add_argument('--logdir', help='directory for logging files', default=None)
     args = parser.parse_args()
     if args.gpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
-    if args.log_dir != None:
-        logger.set_logger_dir(os.path.join("train_log", args.log_dir))
+    if args.logdir != None:
+        logger.set_logger_dir(os.path.join("train_log", args.logdir))
     else:
         logger.auto_set_dir()
 

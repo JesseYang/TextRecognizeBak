@@ -43,7 +43,8 @@ cfg.dictionary = [" ", "\"", "$", "%", "&", "'", "(", ")", "*",
 cfg.label_size = len(cfg.dictionary) + 1
 
 
-cfg.learning_rate = [(0, 1e-5), (3, 3e-5), (6, 6e-5), (10, 1e-4), (60, 1e-5)]
+# cfg.learning_rate = [(0, 1e-5), (3, 3e-5), (6, 6e-5), (10, 1e-4), (60, 1e-5)]
+cfg.learning_rate = [(0, 1e-4), (60, 1e-5)]
 cfg.augmentors = [
             imgaug.ToFloat32(),
             imgaug.RandomOrderAug(
@@ -55,8 +56,6 @@ cfg.augmentors = [
 
 cfg.train_list = ['generated_augment_train.txt']
 cfg.test_list = '1000_test.txt'
-
-cfg.batch_size = 8
 
 cfg.hard_sample_mining = True
 cfg.hard_ratio = 0.3
