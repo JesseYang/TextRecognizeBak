@@ -13,6 +13,7 @@ def hard_loss(loss, hard_sample_num, name):
     # loss = tf.squeeze(loss)
     dtype = loss.dtype
 
+    hard_sample_num = tf.minimum(hard_sample_num, tf.shape(loss)[0])
     val, idxes = tf.nn.top_k(loss, k=hard_sample_num)
 
     min_hard_loss = val[-1]
